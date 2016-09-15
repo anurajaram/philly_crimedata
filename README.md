@@ -15,5 +15,6 @@ Program - crimedensity_contourmap.R <br />
 Create area contour maps showing density of crime categories. <br />
 This can also be viewed as an RMarkdown file with detailed explanation under link: <br />
 http://rpubs.com/anupamaprv/209378 <br />
-Area map - ![Alt text](https://github.com/anurajaram/philly_crimedata/blob/master/frauddf.jpg "Philadelphia Fraud Occurence") 
+Area map - <br />
+![Alt text](https://github.com/anurajaram/philly_crimedata/blob/master/frauddf.jpg "Philadelphia Fraud Occurence") 
 
