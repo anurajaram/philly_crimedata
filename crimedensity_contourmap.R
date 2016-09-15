@@ -4,38 +4,42 @@
 # Dataset - Philadelphia Crime Data from Kaggle
 
 # call source file with all required packages.
-source("C:/anu/data analytics/twitter API - aug 2016/workspace_prep.R")
+library(data.table)   # for fread() 
+library(sqldf)
+library(bit64)
+library(plyr)
+library(sqldf)
+
+library(heatmaply)
+library(plotly)
+library(htmltools)
+library(ggvis)
+
+library('dplyr')      # for data manipulation
+library('tidyr')      # for reshaping data
+
+library('ggplot2')    # plotting data
+library('scales')     # for scale_y_continuous(label = percent)
+library('ggthemes')   # for scale_fill_few('medium')
+
+library("maps")
+library(leaflet)
 library(ggmap)
 library(ggplot2)
 library(dplyr)
-library(data.table)
 
 # Read the crime data
 phildata <- fread("crime.csv")
-
-
-# summarise latitude and longitude data
-summary(phildata$Lon)
-summary(phildata$Lat)
-# note, even with 16722 NAs (missing values), it is less than ~0.8% of missing data.
-
-
-# summarise crime categories
-summary(phildata$Text_General_Code)
-
-# checking for date time manipulation
-phildata$dt = as.Date(phildata$Dispatch_Date)
-phildata$year = as.numeric(format(phildata$dt, "%Y"))
-phildata$mth = as.numeric(format(phildata$dt, "%m"))
-phildata$day = as.numeric(format(phildata$dt, "%d"))
 
 
 # contour map for Philadelphia
 phil = c(lon = -75.19, lat = 39.98)
 philmap = get_map(location = phil, zoom = 12, color = "bw")
 
-philm <- readRDS("phillymapobj.rds")
 
+# We write a function to generate contour map filtered for a specific crime category.
+# Colors indiacte whether crime is high or low. 
+# red= high_count, green=low_count
 map_crime <- function(crime_data, crime_category_name) 
   {
       titlestr <- paste("Heatmap for crimes related to", crime_category_name )
@@ -49,16 +53,29 @@ map_crime <- function(crime_data, crime_category_name)
         ggtitle(titlestr)
         theme(legend.position = "none", axis.title = element_blank(), text = element_text(size = 12)) 
       
-      
   return(plotimg)
 }
 
-ggmap(philmap)
-map_crime(phildata, c('Thefts'))  # image stored as theft_philly.jpeg
-map_crime(phildata, c('Fraud')) # image = frauddf.jpg
+
+# Call function to view crime-density map for Thefts
+map_crime(phildata, c('Thefts'))
+
+
+# Call function to view crime-density map for Thefts
+map_crime(phildata, c('Fraud'))
+
+
+# Call function to view crime-density map for Aggravated assault
 map_crime(phildata, c('Aggravated Assault No Firearm'))
-map_crime(phildata, c('Narcotic / Drug Law Violations'))  # image = narcotic_philly.jpg
-map_crime(phildata, c('Burglary Residential')) # image = burglary_philly.jpg
+
+
+# Call function to view crime-density map for Narcotics
+map_crime(phildata, c('Narcotic / Drug Law Violations'))
+
+
+# Call function to view crime-density map for Burglary
+map_crime(phildata, c('Burglary Residential'))
+
 
 
 
